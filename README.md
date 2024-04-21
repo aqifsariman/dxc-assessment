@@ -37,9 +37,8 @@ Place .env in the root of the folder with the following details:
 
 ### Spring Boot
 
-1. Clone the repository: `git clone https://github.com/aqifsariman/dxc-assessment.git`
-2. Navigate to the backend directory: `cd java.assessment`
-3. Start the Spring Boot application: `mvn spring-boot:run`
+1. Navigate to the backend directory from root directory: `cd java.assessment`
+2. Start the Spring Boot application: `mvn spring-boot:run`
 
 ## Important
 
