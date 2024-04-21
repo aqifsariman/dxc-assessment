@@ -24,6 +24,7 @@ Place .env in the root of the folder with the following details:
 - `DB_URL`: The URL of the PostgreSQL database.
 - `DB_USERNAME`: The username for accessing the PostgreSQL database.
 - `DB_PASSWORD`: The password for accessing the PostgreSQL database.
+- `ALLOWED_ORIGINS`: The endpoint the frontend React app is using (e.g. http://localhost:3000).
 
 ## Setup
 
