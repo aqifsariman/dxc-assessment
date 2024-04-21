@@ -4,7 +4,7 @@ import axios from 'axios';
 
 function RegistrationPage() {
   const [formData, setFormData] = useState({
-    displayName: '',
+    displayname: '',
     username: '',
     password: '',
     confirmPassword: '',
