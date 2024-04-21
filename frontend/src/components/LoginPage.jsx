@@ -13,10 +13,13 @@ function LoginPage() {
     setLoginError('');
 
     try {
-      const response = await axios.post('http://localhost:8080/api/login', {
-        username: username,
-        password: password,
-      });
+      const response = await axios.post(
+        process.env.REACT_APP_API_LOGIN_ENDPOINT,
+        {
+          username: username,
+          password: password,
+        }
+      );
       if (response.status === 200) {
         sessionStorage.setItem('isLoggedIn', true);
         sessionStorage.setItem('username', username);
