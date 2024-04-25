@@ -7,11 +7,13 @@ import org.springframework.core.io.Resource;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.Statement;
+import java.util.stream.Collectors;
 
 @Component
 public class JdbcMigration {
@@ -31,17 +33,19 @@ public class JdbcMigration {
 
     PathMatchingResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
     try {
-      // Assuming SQL files are placed in src/main/resources/db/migration
-      Resource[] resources = resolver.getResources("classpath:/db/migration/*.sql");
+      Resource[] resources = resolver.getResources("classpath*:db/migration/*.sql");
       try (Connection conn = DriverManager.getConnection(dbUrl, dbUsername, dbPassword)) {
         for (Resource resource : resources) {
-          String sql = new String(Files.readAllBytes(resource.getFile().toPath()), StandardCharsets.UTF_8);
-          try (Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
-            logger.info("Executed migration: {}", resource.getFilename());
-          } catch (Exception e) {
-            logger.error("Failed to execute migration: {}", resource.getFilename(), e);
-            throw e; // Rethrow to stop further execution in case of failure
+          try (BufferedReader reader = new BufferedReader(
+              new InputStreamReader(resource.getInputStream(), StandardCharsets.UTF_8))) {
+            String sql = reader.lines().collect(Collectors.joining("\n"));
+            try (Statement stmt = conn.createStatement()) {
+              stmt.execute(sql);
+              logger.info("Executed migration: {}", resource.getFilename());
+            } catch (Exception e) {
+              logger.error("Failed to execute migration: {}", resource.getFilename(), e);
+              throw e;
+            }
           }
         }
         logger.info("Database migrations completed successfully.");
