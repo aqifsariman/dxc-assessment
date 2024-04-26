@@ -11,6 +11,8 @@ function LoginPage() {
   const handleLogin = async (event) => {
     event.preventDefault();
     setLoginError('');
+    console.log('Logging in now.');
+    console.log(event);
 
     try {
       const response = await axios.post(
